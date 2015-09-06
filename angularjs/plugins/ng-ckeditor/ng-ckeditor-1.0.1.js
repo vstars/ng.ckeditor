@@ -40,7 +40,7 @@
 	    setTimeout(function() {
 		var editor = CKEDITOR.appendTo(attrs.bind, config, '');
 		(editor).on('change', function(evt) {
-		    eval('(function(){ scope.' + attrs.bind + ' = evt.editor.getData(); })()');
+		    scope[attrs.bind] = evt.editor.getData();
 		    if (attrs.msnCount != undefined) {
 			element[0].querySelector('.totalTypedCharacters').innerHTML = attrs.msnCount + " " + evt.editor.getData().length;
 		    }
