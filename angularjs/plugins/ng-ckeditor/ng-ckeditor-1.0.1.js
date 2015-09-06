@@ -3,7 +3,7 @@
  * e-mail: miller.augusto@gmail.com
  * github: miamarti
  * */
-(function(window, document) {
+(function(window, document,angular) {
     "use strict";
     (angular.module('ng.ckeditor', [ 'ng' ])).directive('ngCkeditor', function() {
 
@@ -11,16 +11,16 @@
 	    var editor = event.editor, element = editor.element;
 	    if (element.getAttribute('class') == 'simpleEditor') {
 		editor.on('configLoaded', function() {
-		    editor.config.removePlugins = 'colorbutton,find,flash,font, forms,iframe,image,newpage,removeformat, smiley,specialchar,stylescombo,templates';
+		    editor.config.removePlugins = 'colorbutton,find,flash,font, forms,iframe,image,newpage,removeformat,smiley,specialchar,stylescombo,templates';
 		    editor.removeButtons = 'About';
 		    editor.config.toolbarGroups = [ {
-			name : 'editing',
-			groups : [ 'basicstyles', 'links' ]
+				name : 'editing',
+				groups : [ 'basicstyles', 'links' ]
 		    }, {
-			name : 'undo'
+				name : 'undo'
 		    }, {
-			name : 'clipboard',
-			groups : [ 'selection', 'clipboard' ]
+				name : 'clipboard',
+				groups : [ 'selection', 'clipboard' ]
 		    } ];
 		});
 	    }
@@ -29,14 +29,18 @@
 	var container = function(scope, element, attrs) {
 	    element[0].innerHTML = '<div id="' + attrs.bind + '"></div> <div class="totalTypedCharacters"></div>';
 	    var config = {
-		removeButtons : (attrs.removeButtons != undefined) ? 'About,' + attrs.removeButtons : 'About'
+			removeButtons : (attrs.removeButtons != undefined) ? 'About,' + attrs.removeButtons : 'About'
 	    };
 	    if (attrs.removePlugins != undefined) {
-		config.removePlugins = attrs.removePlugins;
+			config.removePlugins = attrs.removePlugins;
 	    }
 	    if (attrs.skin != undefined) {
-		config.skin = attrs.skin;
+			config.skin = attrs.skin;
 	    }
+		if (attrs.config) {
+			var cfgJson = angular.fromJson(attrs.config);
+			angular.extend(config, cfgJson);
+		}
 	    setTimeout(function() {
 		var editor = CKEDITOR.appendTo(attrs.bind, config, '');
 		(editor).on('change', function(evt) {
@@ -55,4 +59,4 @@
 	    link : container
 	};
     });
-})(window, document);
+})(window, document, angular);
